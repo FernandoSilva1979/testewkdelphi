@@ -1,0 +1,452 @@
+unit uclassePedidos;
+
+interface
+   uses
+  System.SysUtils, System.Generics.Collections,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, FireDAC.Phys.ADSDef,
+  FireDAC.Phys.ADS, Data.DB, FireDAC.Comp.Client, FireDAC.Stan.Param,
+  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet,Dialogs;
+
+    type Tpedidos = class
+  private
+     Fid : integer;
+     Femissao : TDate;
+     Fcliente : integer;
+     Fdesccliente : string;
+     Ftotal : double;
+    procedure Setcliente(const Value: Integer);
+    procedure Setemissao(const Value: TDate);
+    procedure Setid(const Value: Integer);
+    procedure Settotal(const Value: double);
+    procedure Setdesccliente(const Value: string);
+  public
+     property id :Integer read Fid write Setid;
+     property emissao : TDate read Femissao write Setemissao;
+     property cliente : Integer read Fcliente write Setcliente;
+     property desccliente : string read Fdesccliente write Setdesccliente;
+     property total : double read Ftotal write Settotal;
+     function buscarPedido(busca : string; tipo : string) : TObjectList<Tpedidos>;
+     function salvarPedido(vpedido : Tpedidos; acao : string): Integer;
+     function deletarPedido(idpedido : integer) : Boolean;
+    constructor Create();
+  end;
+
+
+  Type TListaPedidos = class
+  private
+    FListaPedidos : TObjectList<Tpedidos>;
+  protected
+  public
+    constructor Create;
+    procedure Adicionar(pPedido: Tpedidos);
+    property ListaPedidos : TObjectList<Tpedidos> read FListaPedidos write FListaPedidos;
+  published
+  end;
+
+
+  type Titenspedido = class
+   private
+      Fiditens : integer;
+      Fproduto : integer;
+      Fdescproduto : string;
+      Fquantidade : double;
+      Fprecounitario : double;
+      Ftotalunitario : double;
+    procedure Setiditens(const Value: Integer);
+    procedure Setprecounitario(const Value: double);
+    procedure Setproduto(const Value: Integer);
+    procedure Setquantidade(const Value: double);
+    procedure Settotalunitario(const Value: double);
+    procedure Setdescproduto(const Value: string);
+  public
+     constructor Create;
+     procedure ExcluirItens(iditem : integer);
+     function AtualizarTotal(idpedido : integer) : double;
+     function buscarItens(busca : string): TObjectList<Titenspedido>;
+     procedure atualizarItens(vitem : Titenspedido);
+     property iditens : Integer read Fiditens write Setiditens;
+     property produto : Integer read Fproduto write Setproduto;
+     property descproduto : string read Fdescproduto write Setdescproduto;
+     property quantidade : double read Fquantidade write Setquantidade;
+     property precounitario : double read Fprecounitario write Setprecounitario;
+     property totalunitario : double read Ftotalunitario write Settotalunitario;
+  end;
+
+  Type TListaItens = class
+  private
+    FListaItens : TObjectList<Titenspedido>;
+  protected
+  public
+    constructor Create;
+    procedure AdicionarItens(pItenspedido: Titenspedido);
+    property ListaItens : TObjectList<Titenspedido> read FListaItens write FListaItens;
+  published
+  end;
+
+
+implementation
+ uses udmModule;
+
+
+{ Tpedidos }
+
+function Tpedidos.salvarPedido(vpedido : Tpedidos; acao : string): Integer;
+var FB_Query : TFDQuery;
+    vUlt_id : integer;
+begin
+  FB_Query := TFDQuery.Create(nil);
+  with FB_Query do
+  begin
+     connection:= dmModule.conexaoBanco;
+     connection.StartTransaction;
+     try
+       close;
+       sql.clear;
+       if (acao='incluir') then
+       begin
+         sql.Add('INSERT INTO pedidos (data_emissao,cod_cliente,valor_total) '
+                +' values ('''+ formatdatetime('YYYY-MM-DD',vpedido.emissao)
+                +''','''+inttostr(vpedido.cliente)
+                +''','''+StringReplace(floattostr(vpedido.total),',', '.',[rfReplaceAll, rfIgnoreCase])+''')');
+        end
+        else
+        begin
+         sql.Add('update pedidos set data_emissao='''+formatdatetime('YYYY-MM-DD',vpedido.emissao)
+                +''' ,cod_cliente='''+inttostr(vpedido.cliente)
+                +''' ,valor_total='''+StringReplace(floattostr(vpedido.total),',', '.',[rfReplaceAll, rfIgnoreCase])
+                +''' where nro_pedido='''+ inttostr(vpedido.id)+'''');
+         vUlt_id := vpedido.id;
+         end;
+       execsql;
+
+       if (acao='incluir') then
+       begin
+          close;
+          sql.clear;
+          sql.add('SELECT LAST_INSERT_ID() ult_id');
+          open;
+          vUlt_id := fieldbyname('ult_id').value;
+       end;
+       connection.commit;
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao Incluir Pedido : ' + E.Message );
+            connection.Rollback;
+          end;
+     end;
+     Result :=vUlt_id;
+     Free;
+  end;
+end;
+
+
+function Tpedidos.deletarPedido(idpedido : integer) : Boolean;
+var FB_Query : TFDQuery;
+    sucesso :  boolean;
+begin
+  FB_Query := TFDQuery.Create(nil);
+  with FB_Query do
+   begin
+     Connection:= dmModule.conexaoBanco;
+     Connection.StartTransaction;
+     try
+        close;
+        sql.clear;
+        sql.add('delete from pedidos '+
+             ' where nro_pedido='+QuotedStr(inttostr(idpedido)));
+       execsql;
+       sucesso:=true;
+       Connection.Commit;
+       Except
+       on E: Exception do
+          begin
+             ShowMessage('Erro ao Excluir Pedido : ' + E.Message );
+             sucesso:=false;
+             Connection.Rollback;
+          end;
+     end;
+    Result := sucesso;
+    Free;
+   end;
+end;
+
+
+function Tpedidos.buscarPedido(busca : string; tipo : string ): TObjectList<Tpedidos>;
+var FB_Query : TFDQuery;
+    vErro : boolean;
+    temppedido : Tpedidos;
+    templistapedido : TListaPedidos;
+    i : integer;
+begin
+  FB_Query :=TFDQuery.Create(nil);
+  with FB_Query do
+  begin
+     Connection:= dmModule.conexaoBanco;
+     Connection.StartTransaction;
+
+     try
+        temppedido:=Tpedidos.Create;
+        templistapedido := TListaPedidos.create;
+        close;
+        sql.clear;
+        if (tipo='lista') then
+          sql.add('SELECT a.*,(select nome from clientes b where b.cod_cliente=a.cod_cliente) desccliente from pedidos a'
+                  + ' where nro_pedido like ''%'+busca+'%'' order by nro_pedido')
+          else
+          sql.add('SELECT a.*,(select nome from clientes b where b.cod_cliente=a.cod_cliente) desccliente from pedidos  a where nro_pedido = '+busca);
+
+        open;
+        while not eof do
+         begin
+             templistapedido.FListaPedidos.Add(Tpedidos.Create);
+             i := templistapedido.FListaPedidos.Count -1;
+             templistapedido.FListaPedidos[i].id := fieldbyname('nro_pedido').value;
+             templistapedido.FListaPedidos[i].emissao := fieldbyname('data_emissao').value;
+             templistapedido.FListaPedidos[i].cliente := fieldbyname('cod_cliente').value;
+             templistapedido.FListaPedidos[i].desccliente := fieldbyname('desccliente').asstring;
+             templistapedido.FListaPedidos[i].total := fieldbyname('valor_total').value;
+             next;
+         end;
+         Connection.Commit;
+         Except
+         on E: Exception do
+          begin
+             ShowMessage('Erro ao Buscar Pedido : ' + E.Message );
+             Connection.Rollback;
+          end;
+     end;
+     Result := templistapedido.FListaPedidos;
+     Free;
+  end;
+end;
+
+
+constructor TPedidos.Create;
+begin
+//   id:=0;
+end;
+
+procedure Tpedidos.Setcliente(const Value: Integer);
+begin
+  Fcliente := Value;
+end;
+
+procedure Tpedidos.Setdesccliente(const Value: string);
+begin
+  Fdesccliente := Value;
+end;
+
+procedure Tpedidos.Setemissao(const Value: TDate);
+begin
+  Femissao := Value;
+end;
+
+procedure Tpedidos.Setid(const Value: Integer);
+begin
+  Fid := Value;
+end;
+
+
+procedure Tpedidos.Settotal(const Value: double);
+begin
+  Ftotal := Value;
+end;
+
+{ Titenspedido }
+
+constructor Titenspedido.Create;
+begin
+  iditens := 0;
+end;
+
+function Titenspedido.buscarItens(busca : string): TObjectList<Titenspedido>;
+var FB_Query : TFDQuery;
+    vErro : boolean;
+    temppedido : Titenspedido;
+    templistaitens : TListaItens;
+    i : integer;
+begin
+  FB_Query :=TFDQuery.Create(nil);
+  with FB_Query do
+  begin
+     Connection:= dmModule.conexaoBanco;
+     Connection.StartTransaction;
+     try
+       temppedido:=Titenspedido.Create;
+       templistaitens := TListaItens.create;
+       close;
+       sql.clear;
+       sql.add('SELECT a.*,(select descricao from produtos b where b.id=a.cod_produto) descproduto from pedidos_produtos a  where nro_pedido ='''+busca+'''');
+       open;
+       while not eof do
+         begin
+             templistaitens.FListaItens.Add(Titenspedido.Create);
+             i := templistaitens.FListaItens.Count -1;
+             templistaitens.FListaItens[i].iditens := fieldbyname('id').value;
+             templistaitens.FListaItens[i].produto := fieldbyname('cod_produto').value;
+             templistaitens.FListaItens[i].descproduto := fieldbyname('descproduto').value;
+             templistaitens.FListaItens[i].precounitario := fieldbyname('quantidade').value;
+             templistaitens.FListaItens[i].quantidade := fieldbyname('vlr_unitario').value;
+             templistaitens.FListaItens[i].totalunitario := fieldbyname('vlr_total').value;
+             next;
+         end;
+         Connection.Commit;
+         Except
+         on E: Exception do
+           begin
+             ShowMessage('Erro ao Buscar Pedido : ' + E.Message );
+             Connection.Rollback;
+           end;
+      end;
+     Result := templistaitens.FListaItens;
+     Free;
+  end;
+end;
+
+
+procedure Titenspedido.ExcluirItens(iditem : integer);
+ var FB_Query : TFDQuery;
+    i : integer;
+ begin
+    FB_Query :=TFDQuery.Create(nil);
+    with FB_Query do
+     begin
+       Connection:= dmModule.conexaoBanco;
+       Connection.StartTransaction;
+       try
+         close;
+         sql.clear;
+         sql.add('delete from pedidos_produtos where nro_pedido='''+inttostr(iditem)+'''');
+         execsql;
+         Connection.Commit;
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao excluir itens de Pedido : ' + E.Message );
+            Connection.Rollback;
+          end;
+       end;
+    end;
+end;
+
+
+function Titenspedido.AtualizarTotal(idpedido : integer) : double;
+ var FB_Query : TFDQuery;
+    i : integer;
+    total : double;
+ begin
+    total := 0;
+    FB_Query :=TFDQuery.Create(nil);
+    with FB_Query do
+     begin
+       try
+         Connection:= dmModule.conexaoBanco;
+         close;
+         sql.clear;
+         sql.add('select COALESCE(SUM(vlr_total),0) total from pedidos_produtos where nro_pedido ='''+inttostr(idpedido)+'''');
+         open;
+         total := strtofloat(fieldbyname('total').asstring);
+
+         sql.clear;
+         sql.add('update pedidos '
+                 +' set valor_total='''+StringReplace(floattostr(total),',', '.',[rfReplaceAll, rfIgnoreCase])+''''
+                 +' where nro_pedido='''+inttostr(idpedido)+'''');
+         execsql;
+        Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao excluir itens de Pedido : ' + E.Message );
+          end;
+       end;
+    end;
+   Result := total;
+end;
+
+
+procedure Titenspedido.atualizarItens(vitem : Titenspedido);
+ var FB_Query : TFDQuery;
+     i : integer;
+ begin
+    FB_Query :=TFDQuery.Create(nil);
+    with FB_Query do
+     begin
+       try
+         Connection:= dmModule.conexaoBanco;
+         close;
+         sql.clear;
+         sql.Add('INSERT INTO pedidos_produtos (nro_pedido,cod_produto,quantidade,vlr_unitario,vlr_total) '
+                +' values ('''+ inttostr(vitem.iditens)
+                +''','''+inttostr(vitem.produto)
+                +''','''+StringReplace(floattostr(vitem.quantidade),',', '.',[rfReplaceAll, rfIgnoreCase])
+                +''','''+ StringReplace(floattostr(vitem.precounitario),',', '.',[rfReplaceAll, rfIgnoreCase])
+                +''','''+StringReplace(floattostr(vitem.totalunitario),',', '.',[rfReplaceAll, rfIgnoreCase])+''')');
+         execsql;
+
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao Atualizar Pedido : ' + E.Message );
+          end;
+       end;
+    end;
+end;
+
+procedure Titenspedido.Setdescproduto(const Value: string);
+begin
+  Fdescproduto := Value;
+end;
+
+procedure Titenspedido.Setiditens(const Value: Integer);
+begin
+  Fiditens := Value;
+end;
+
+procedure Titenspedido.Setprecounitario(const Value: double);
+begin
+  Fprecounitario := Value;
+end;
+
+procedure Titenspedido.Setproduto(const Value: Integer);
+begin
+  Fproduto := Value;
+end;
+
+procedure Titenspedido.Setquantidade(const Value: double);
+begin
+  Fquantidade := Value;
+end;
+
+procedure Titenspedido.Settotalunitario(const Value: double);
+begin
+  Ftotalunitario := Value;
+end;
+
+{ TListaPedido }
+
+procedure TListaPedidos.Adicionar(pPedido: Tpedidos);
+begin
+   FListaPedidos.Add(pPedido);
+end;
+
+constructor TListaPedidos.Create;
+begin
+   FListaPedidos := TObjectList<Tpedidos>.Create;
+end;
+
+{ TListaItens }
+
+procedure TListaItens.AdicionarItens(pItenspedido: Titenspedido);
+begin
+   FListaItens.Add(pItenspedido);
+end;
+
+constructor TListaItens.Create;
+begin
+     FListaItens := TObjectList<Titenspedido>.Create;
+end;
+
+end.

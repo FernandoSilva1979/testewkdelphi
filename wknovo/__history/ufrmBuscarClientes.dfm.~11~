@@ -1,0 +1,35 @@
+inherited frmBuscarClientes: TfrmBuscarClientes
+  Caption = 'Buscar Clientes'
+  TextHeight = 15
+  inherited grpPrincipal: TGroupBox
+    inherited btnBuscar: TBitBtn
+      OnClick = btnBuscarClick
+    end
+  end
+  inherited dsTemp: TDataSource
+    DataSet = tableTemp
+    Left = 168
+    Top = 257
+  end
+  object tableTemp: TFDMemTable
+    Active = True
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 152
+    Top = 185
+    object tableTempid: TIntegerField
+      FieldName = 'id'
+    end
+    object tableTempnome: TStringField
+      FieldName = 'nome'
+    end
+    object tableTempcep: TStringField
+      FieldName = 'cep'
+    end
+  end
+end

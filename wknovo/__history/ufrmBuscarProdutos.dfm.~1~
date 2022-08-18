@@ -1,0 +1,4 @@
+inherited frmTemplateBuscar1: TfrmTemplateBuscar1
+  Caption = 'frmTemplateBuscar1'
+  TextHeight = 15
+end

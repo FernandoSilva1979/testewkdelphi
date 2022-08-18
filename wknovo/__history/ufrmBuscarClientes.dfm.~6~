@@ -1,0 +1,13 @@
+inherited frmBuscarClientes: TfrmBuscarClientes
+  Caption = 'Buscar Clientes'
+  TextHeight = 15
+  inherited grpPrincipal: TGroupBox
+    inherited btnBuscar: TBitBtn
+      OnClick = btnBuscarClick
+    end
+  end
+  inherited QryBusca: TFDQuery
+    SQL.Strings = (
+      'SELECT * from clientes')
+  end
+end

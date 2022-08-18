@@ -1,0 +1,15 @@
+object dmModule: TdmModule
+  Height = 480
+  Width = 640
+  object conexaoBanco: TIBDatabase
+    Connected = True
+    DatabaseName = '\\127.0.0.1\D:\Agrotis\banco\BANCO.FDB'
+    Params.Strings = (
+      'user_name=SYSDBA'
+      'password=masterkey')
+    LoginPrompt = False
+    ServerType = 'IBServer'
+    Left = 288
+    Top = 80
+  end
+end

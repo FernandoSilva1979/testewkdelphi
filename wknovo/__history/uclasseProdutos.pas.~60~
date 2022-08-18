@@ -1,0 +1,212 @@
+unit uclasseProdutos;
+
+interface
+
+   uses
+  System.SysUtils, System.Generics.Collections,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, FireDAC.Phys.ADSDef,
+  FireDAC.Phys.ADS, Data.DB, FireDAC.Comp.Client, FireDAC.Stan.Param,
+  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet,Dialogs;
+
+
+  type Tprodutos = class
+  private
+       Fid : integer;
+       Fcod_produto : integer;
+       Fdescricao : string;
+       Fpreco_venda : double;
+    procedure Setid(const Value: Integer);
+    procedure Setcod_produto(const Value: Integer);
+    procedure Setdescricao(const Value: String);
+    procedure Setpreco_venda(const Value: double);
+  public
+    property id :Integer read Fid write Setid;
+    property cod_produto :Integer read Fcod_produto write Setcod_produto;
+    property descricao : String read Fdescricao write Setdescricao;
+    property preco_venda : double read Fpreco_venda write Setpreco_venda;
+
+    function buscarProduto(busca : string; tipo : string ): TObjectList<Tprodutos>;
+    function deletarProduto(idproduto : integer) : Boolean;
+    function salvarProduto(vproduto : Tprodutos; acao : string): Boolean;
+    constructor Create();
+  end;
+
+   Type
+  TListaProdutos = class
+  private
+    FListaProdutos : TObjectList<Tprodutos>;
+  protected
+  public
+    constructor Create;
+    procedure Adicionar(pProduto : Tprodutos);
+    property ListaProdutos: TObjectList<Tprodutos> read FListaProdutos write FListaProdutos;
+  published
+  end;
+
+
+
+implementation
+    uses udmModule;
+
+{ Tprodutos }
+
+function Tprodutos.salvarProduto(vproduto : Tprodutos; acao : string): Boolean;                 // insercao de produtos no pedido
+var FB_Query : TFDQuery;
+    vErro : boolean;
+    vUlt_id : integer;
+
+begin
+  FB_Query := TFDQuery.Create(nil);
+  with FB_Query do
+  begin
+     try
+       vErro := true;
+       connection:= dmModule.conexaoBanco;
+       close;
+       sql.clear;
+       if (acao='incluir') then
+       begin
+         sql.Add('INSERT INTO produtos (cod_produto,descricao,preco_venda) '
+                +' values ('''+inttostr(vproduto.cod_produto) +''','''+vproduto.descricao
+                +''','''+StringReplace(floattostr(vproduto.preco_venda),',', '.',[rfReplaceAll, rfIgnoreCase])+''')');
+        end
+        else
+        begin
+         sql.Add('update produtos set descricao =''' + vproduto.descricao
+                 +''' ,cod_produto ='''+inttostr(vproduto.cod_produto)
+                +''' ,preco_venda ='''+StringReplace(floattostr(vproduto.preco_venda),',', '.',[rfReplaceAll, rfIgnoreCase])
+                +''' where id ='''+ inttostr(vproduto.id)+'''');
+         end;
+
+       execsql;
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao Incluir Produto : ' + E.Message );
+            vErro:=false
+          end;
+     end;
+     Result :=vErro;
+     Free;
+  end;
+end;
+
+
+function Tprodutos.deletarProduto(idproduto : integer) : Boolean;         // excluir item com argumento de nro de pedido e cod produto
+var FB_Query : TFDQuery;
+    sucesso :  boolean;
+begin
+  FB_Query := TFDQuery.Create(nil);
+  with FB_Query do
+   begin
+      Connection:= dmModule.conexaoBanco;
+     try
+       close;
+       sql.clear;
+       sql.add('delete from produtos '+
+           ' where id='+QuotedStr(inttostr(idproduto)));
+       execsql;
+       sucesso:=true;
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao Excluir Produto : ' + E.Message );
+            sucesso:=false;
+          end;
+     end;
+   Result := sucesso;
+   Free;
+  end;
+end;
+
+
+
+function Tprodutos.buscarProduto(busca : string; tipo : string ): TObjectList<Tprodutos>;
+var FB_Query : TFDQuery;
+    vErro : boolean;
+    tempproduto : Tprodutos;
+    templistaproduto : TListaProdutos;
+    i : integer;
+begin
+  FB_Query :=TFDQuery.Create(nil);
+  with FB_Query do
+  begin
+     try
+       Connection:= dmModule.conexaoBanco;
+        tempproduto:=Tprodutos.Create;
+        templistaproduto := TListaProdutos.create;
+       close;
+       sql.clear;
+       if (tipo='lista') then
+          sql.add('SELECT id,cod_produto,descricao,preco_venda from produtos'
+                  + ' where (cod_produto like ''%'+busca+'%'' or descricao like ''%'+busca+'%'') order by id')
+          else
+          sql.add('SELECT * from produtos where id = '+busca);
+
+       open;
+       while not eof do
+         begin
+           templistaproduto.FListaProdutos.Add(Tprodutos.Create);
+           i := templistaproduto.FListaProdutos.Count -1;
+           templistaproduto.FListaProdutos[i].id := fieldbyname('id').value;
+           templistaproduto.FListaProdutos[i].cod_produto := fieldbyname('cod_produto').value;
+           templistaproduto.FListaProdutos[i].descricao:= fieldbyname('descricao').value;
+           templistaproduto.FListaProdutos[i].preco_venda := fieldbyname('preco_venda').value;
+           next;
+       end;
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao Buscar Produto : ' + E.Message );
+          end;
+     end;
+
+     Result := templistaproduto.FListaProdutos;
+     Free;
+  end;
+end;
+
+
+constructor Tprodutos.Create;
+begin
+   id:=0;
+end;
+
+
+procedure Tprodutos.Setcod_produto(const Value: Integer);
+begin
+  Fcod_produto := Value;
+end;
+
+procedure Tprodutos.Setdescricao(const Value: String);
+begin
+  Fdescricao := Value;
+end;
+
+procedure Tprodutos.Setid(const Value: Integer);
+begin
+  Fid := Value;
+end;
+
+
+procedure Tprodutos.Setpreco_venda(const Value: double);
+begin
+    Fpreco_venda := Value;
+end;
+
+{ TListaProdutos }
+
+procedure TListaProdutos.Adicionar(pProduto: Tprodutos);
+begin
+ FListaProdutos.Add(pProduto);
+end;
+
+constructor TListaProdutos.Create;
+begin
+   FListaProdutos := TObjectList<Tprodutos>.Create;
+end;
+
+end.

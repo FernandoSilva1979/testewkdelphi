@@ -1,0 +1,96 @@
+unit ufrmProdutos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ufrmTemplateCadastro, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.Menus;
+
+type
+  TfrmProdutos = class(TfrmTemplateCadastro)
+    edtDescricao: TEdit;
+    labNome: TLabel;
+    Label1: TLabel;
+    edtPreco: TEdit;
+    labCodProduto: TLabel;
+    edtCodProduto: TEdit;
+    procedure btnBuscarClick(Sender: TObject);
+    procedure btnSalvarClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmProdutos: TfrmProdutos;
+
+implementation
+
+{$R *.dfm}
+
+uses ufrmBuscarProdutos,uclasseProdutos;
+
+procedure TfrmProdutos.btnBuscarClick(Sender: TObject);
+begin
+   try
+     frmBuscarProdutos := TfrmBuscarProdutos.Create(Self);    //  formes criados e destruidos em tempo de execaucao
+     frmBuscarProdutos.ShowModal;
+   finally
+     freeandnil(frmBuscarProdutos);
+   end;
+end;
+
+
+procedure TfrmProdutos.btnExcluirClick(Sender: TObject);
+ var produtoatual : Tprodutos;
+     sucesso : Boolean;
+begin
+  inherited;
+  If  MessageDlg('Você tem certeza que deseja excluir o registro?',mtConfirmation,[mbyes,mbno],0)=mrno    then
+  exit;
+
+  produtoatual:=Tprodutos.Create;
+  sucesso := produtoatual.deletarProduto(strtoint(labIdAtual.caption));
+  if (sucesso=true) then
+  showmessage('Exclusao Confirmada !!!');
+  btnCancelar.Click;
+end;
+
+
+procedure TfrmProdutos.btnSalvarClick(Sender: TObject);
+ var produtoatual : Tprodutos;
+     sucesso : Boolean;
+begin
+   if ((edtCodProduto.Text='') or (edtDescricao.Text='') or (edtPreco.Text='')) then
+     begin
+       showmessage('erro !!! preencha campos obrigatorios.');
+       exit;
+     end;
+
+   produtoatual:=TProdutos.Create;
+   if (labIdAtual.Caption='Novo') then
+   produtoatual.id:=0
+   else
+   produtoatual.id:=strtoint(labIdAtual.caption);                          // prerenche objeto com informações da tela
+   produtoatual.cod_produto := strtoint(edtCodProduto.Text);
+   produtoatual.descricao:=edtDescricao.Text;
+   produtoatual.preco_venda:=strtofloat(edtPreco.Text);
+   if (labIdAtual.Caption='Novo') then
+      begin
+         sucesso := produtoatual.salvarProduto(produtoatual,'incluir');   // inserção de produto passando do objeto de inclusão
+         produtoatual.Free;
+         LimparTela;
+         labIdAtual.Caption:='0';
+      end
+      else
+      if (labIdAtual.Caption <> 'Nenhum') then
+        sucesso:=produtoatual.salvarProduto(produtoatual,'alterar');        // alteracao de clientea passando do objeto de alteração
+
+     if (sucesso) then
+       showmessage('Produto Salvo !!!');
+end;
+
+end.

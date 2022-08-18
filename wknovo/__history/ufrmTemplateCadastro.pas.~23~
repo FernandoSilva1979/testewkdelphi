@@ -1,0 +1,126 @@
+unit ufrmTemplateCadastro;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.Menus;
+
+type
+  TfrmTemplateCadastro = class(TForm)
+    grpPrincipal: TGroupBox;
+    grpFuncoes: TGroupBox;
+    btnNovo: TBitBtn;
+    btnBuscar: TBitBtn;
+    btnExcluir: TBitBtn;
+    btnSalvar: TBitBtn;
+    btnCancelar: TBitBtn;
+    btnSair: TBitBtn;
+    btnAjuda: TBitBtn;
+    labCodigo: TLabel;
+    labCodigoAtual: TLabel;
+    PopupMenu1: TPopupMenu;
+    Ajuda1: TMenuItem;
+    Novo1: TMenuItem;
+    Buscar1: TMenuItem;
+    Salvar1: TMenuItem;
+    Cancelar1: TMenuItem;
+    Excluir1: TMenuItem;
+    Sair1: TMenuItem;
+    procedure FormActivate(Sender: TObject);
+    procedure AtivarBotoes(btnTag : integer);
+    procedure LimparTela();
+    procedure btnSairClick(Sender: TObject);
+    procedure btnNovoClick(Sender: TObject);
+    procedure Novo1Click(Sender: TObject);
+    procedure Ajuda1Click(Sender: TObject);
+    procedure Buscar1Click(Sender: TObject);
+    procedure Salvar1Click(Sender: TObject);
+    procedure Excluir1Click(Sender: TObject);
+    procedure Sair1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmTemplateCadastro: TfrmTemplateCadastro;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmTemplateCadastro.LimparTela();
+var c : integer;
+begin
+    for c := 0 to ComponentCount -1 do
+    begin
+      if Components[c] is TEdit then
+         TEdit(Components[c]).text:='';
+    end;
+end;
+
+procedure TfrmTemplateCadastro.Novo1Click(Sender: TObject);
+begin
+   btnNovo.Click;
+end;
+
+procedure TfrmTemplateCadastro.Sair1Click(Sender: TObject);
+begin
+  btnSair.Click;
+end;
+
+procedure TfrmTemplateCadastro.Salvar1Click(Sender: TObject);
+begin
+  btnSalvar.Click;
+end;
+
+procedure TfrmTemplateCadastro.Ajuda1Click(Sender: TObject);
+begin
+  btnAjuda.Click;
+end;
+
+procedure TfrmTemplateCadastro.AtivarBotoes(btnTag : integer);
+var c : integer;
+begin
+  for c := 0 to ComponentCount -1 do
+    begin
+     if Components[c] is TBitBtn then
+       if (Components[c] as TWinControl).Tag = btnTag then
+          (Components[c] as TWinControl).Visible:=true
+          else
+          (Components[c] as TWinControl).Visible:=false;
+    end;
+end;
+
+procedure TfrmTemplateCadastro.btnNovoClick(Sender: TObject);
+begin
+   grpPrincipal.Enabled:=true;
+   LimparTela;
+   AtivarBotoes(1);
+   labCodigoAtual.Caption:='0';
+end;
+
+procedure TfrmTemplateCadastro.btnSairClick(Sender: TObject);
+begin
+   ModalResult:=mrok;
+end;
+
+procedure TfrmTemplateCadastro.Buscar1Click(Sender: TObject);
+begin
+  btnBuscar.Click;
+end;
+
+procedure TfrmTemplateCadastro.Excluir1Click(Sender: TObject);
+begin
+  btnExcluir.Click;
+end;
+
+procedure TfrmTemplateCadastro.FormActivate(Sender: TObject);
+begin
+   AtivarBotoes(0);
+   grpPrincipal.Enabled:=false;
+end;
+
+end.

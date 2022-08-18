@@ -1,0 +1,35 @@
+object dmModule: TdmModule
+  OnCreate = DataModuleCreate
+  Height = 480
+  Width = 640
+  object conexaoBanco: TIBDatabase
+    Connected = True
+    DatabaseName = '\\127.0.0.1\d:\agrotis\banco\banco.fdb'
+    Params.Strings = (
+      'user_name=SYSDBA'
+      'password=masterkey')
+    LoginPrompt = False
+    ServerType = 'IBServer'
+    Left = 296
+    Top = 152
+  end
+  object IBQuery1: TIBQuery
+    Database = conexaoBanco
+    Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select * from clientes')
+    UpdateObject = IBUpdateSQL1
+    PrecommittedReads = False
+    Left = 168
+    Top = 168
+  end
+  object IBUpdateSQL1: TIBUpdateSQL
+    InsertSQL.Strings = (
+      'insert into clientes (nome,cep) values ('#39'teste'#39','#39'cep'#39')')
+    Left = 248
+    Top = 280
+  end
+end

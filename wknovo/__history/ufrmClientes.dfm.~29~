@@ -1,0 +1,215 @@
+inherited frmClientes: TfrmClientes
+  Caption = 'Cadastro de Clientes'
+  TextHeight = 15
+  inherited grpPrincipal: TGroupBox
+    object labNome: TLabel [0]
+      Left = 75
+      Top = 64
+      Width = 48
+      Height = 15
+      Caption = 'Nome* : '
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object labCep: TLabel [1]
+      Left = 91
+      Top = 104
+      Width = 32
+      Height = 15
+      Caption = 'Cep* :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object labLogradouro: TLabel [2]
+      Left = 48
+      Top = 144
+      Width = 75
+      Height = 15
+      Caption = 'Logradouro* :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object labComplemento: TLabel [3]
+      Left = 33
+      Top = 184
+      Width = 90
+      Height = 15
+      Caption = 'Complemento* :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object labBairro: TLabel [4]
+      Left = 78
+      Top = 225
+      Width = 45
+      Height = 15
+      Caption = 'Bairro* :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object labCidade: TLabel [5]
+      Left = 75
+      Top = 264
+      Width = 48
+      Height = 15
+      Caption = 'Cidade* :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object labUf: TLabel [6]
+      Left = 281
+      Top = 264
+      Width = 26
+      Height = 15
+      Caption = 'UF* :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object labIbge: TLabel [7]
+      Left = 85
+      Top = 305
+      Width = 38
+      Height = 15
+      Caption = 'IBGE* :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    inherited labCodigoAtual: TLabel
+      Width = 66
+      AutoSize = False
+      Caption = 'Nenhum'
+      Transparent = False
+      ExplicitWidth = 66
+    end
+    object edtNome: TEdit
+      Left = 131
+      Top = 61
+      Width = 302
+      Height = 23
+      CharCase = ecUpperCase
+      Color = clWhite
+      TabOrder = 0
+    end
+    object edtCep: TEdit
+      Left = 131
+      Top = 101
+      Width = 121
+      Height = 23
+      CharCase = ecUpperCase
+      Color = clWhite
+      MaxLength = 25
+      TabOrder = 1
+    end
+    object edtLogradouro: TEdit
+      Left = 131
+      Top = 141
+      Width = 302
+      Height = 23
+      CharCase = ecUpperCase
+      TabOrder = 2
+    end
+    object edtComplemento: TEdit
+      Left = 131
+      Top = 181
+      Width = 302
+      Height = 23
+      CharCase = ecUpperCase
+      TabOrder = 3
+    end
+    object edtBairro: TEdit
+      Left = 131
+      Top = 222
+      Width = 302
+      Height = 23
+      CharCase = ecUpperCase
+      TabOrder = 4
+    end
+    object edtCidade: TEdit
+      Left = 131
+      Top = 261
+      Width = 121
+      Height = 23
+      CharCase = ecUpperCase
+      TabOrder = 5
+    end
+    object edtIbge: TEdit
+      Left = 131
+      Top = 302
+      Width = 121
+      Height = 23
+      CharCase = ecUpperCase
+      MaxLength = 20
+      TabOrder = 6
+    end
+    object edtUf: TEdit
+      Left = 317
+      Top = 261
+      Width = 53
+      Height = 23
+      CharCase = ecUpperCase
+      MaxLength = 2
+      TabOrder = 7
+    end
+    object Button1: TButton
+      Left = 192
+      Top = 16
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 8
+      OnClick = Button1Click
+    end
+    object Memo1: TMemo
+      Left = 248
+      Top = 90
+      Width = 185
+      Height = 89
+      Lines.Strings = (
+        'Memo1')
+      TabOrder = 9
+    end
+  end
+  inherited grpFuncoes: TGroupBox
+    inherited btnBuscar: TBitBtn
+      OnClick = btnBuscarClick
+    end
+    inherited btnExcluir: TBitBtn
+      OnClick = btnExcluirClick
+    end
+    inherited btnSalvar: TBitBtn
+      OnClick = btnSalvarClick
+    end
+  end
+end

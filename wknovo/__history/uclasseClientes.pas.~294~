@@ -1,0 +1,215 @@
+unit uclasseClientes;
+
+interface
+   uses
+  System.SysUtils, System.Generics.Collections,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, FireDAC.Phys.ADSDef,
+  FireDAC.Phys.ADS, Data.DB, FireDAC.Comp.Client, FireDAC.Stan.Param,
+  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet,Dialogs;
+
+
+ type Tclientes = class
+  private
+       Fid : integer;
+       Fnome : string;
+       Fcidade : string;
+       Fuf : string;
+    procedure Setid(const Value: Integer);
+    procedure Setnome(const Value: String);
+    procedure Setcidade(const Value: String);
+    procedure Setuf(const Value: String);
+    public
+       property id :Integer read Fid write Setid;
+       property nome : String read Fnome write Setnome;
+       property cidade : String read Fcidade write Setcidade;
+       property uf : String read Fuf write Setuf;
+       function deletarCliente(idcliente : integer) : Boolean;
+       function salvarCliente(vcliente : Tclientes; acao : string): Boolean;
+       function buscarCliente(busca : string; tipo : string) : TObjectList<Tclientes>;
+      constructor Create();
+ end;
+
+ Type
+  TListaCliente = class
+  private
+    FListaClientes : TObjectList<Tclientes>;
+  protected
+  public
+    constructor Create;
+    procedure Adicionar(pCliente: Tclientes);
+    property ListaClientes: TObjectList<Tclientes> read FListaClientes write FListaClientes;
+  published
+  end;
+
+implementation
+   uses udmModule;
+{ Tclientes }
+
+function Tclientes.salvarCliente(vcliente : Tclientes; acao : string): Boolean;                 // insercao de produtos no pedido
+var FB_Query : TFDQuery;
+    vErro : boolean;
+    vUlt_id : integer;
+
+begin
+  FB_Query := TFDQuery.Create(nil);
+  with FB_Query do
+  begin
+     try
+       vErro := true;
+       connection:= dmModule.conexaoBanco;
+       close;
+       sql.clear;
+       if (acao='incluir') then
+       begin
+         sql.Add('INSERT INTO clientes (nome,cep,logradouro,complemento,bairro,cidade,uf,ibge) '
+                +' values ('''+ vcliente.nome
+                +''','''+vcliente.cidade
+                +''','''+vcliente.uf+''')');
+        end
+        else
+        begin
+         sql.Add('update clientes set nome=''' + vcliente.nome
+                +''' ,cidade='''+vcliente.cidade
+                +''' ,uf='''+vcliente.uf
+                +''' where idcliente='''+ inttostr(vcliente.id)+'''');
+         end;
+
+       execsql;
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao Incluir Cliente : ' + E.Message );
+            vErro:=false
+          end;
+     end;
+     Result :=vErro;
+     Free;
+  end;
+end;
+
+
+function Tclientes.deletarCliente(idcliente : integer) : Boolean;         // excluir item com argumento de nro de pedido e cod produto
+var FB_Query : TFDQuery;
+    sucesso :  boolean;
+begin
+  FB_Query := TFDQuery.Create(nil);
+  with FB_Query do
+   begin
+      Connection:= dmModule.conexaoBanco;
+     try
+       close;
+       sql.clear;
+       sql.add('delete from clientes '+
+           ' where idcliente='+QuotedStr(inttostr(idcliente)));
+       execsql;
+       sucesso:=true;
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao Excluir Cliente : ' + E.Message );
+            sucesso:=false;
+          end;
+     end;
+   Result := sucesso;
+   Free;
+  end;
+end;
+
+
+
+function Tclientes.buscarCliente(busca : string; tipo : string ): TObjectList<Tclientes>;
+var FB_Query : TFDQuery;
+    vErro : boolean;
+    tempcliente : Tclientes;
+    templistacliente : TListaCliente;
+    i : integer;
+begin
+  FB_Query :=TFDQuery.Create(nil);
+  with FB_Query do
+  begin
+     try
+       Connection:= dmModule.conexaoBanco;
+        tempcliente:=Tclientes.Create;
+        templistacliente := TListaCliente.create;
+       close;
+       sql.clear;
+       sql.add('SELECT * from clientes where cod_cliente = '+busca);
+
+       open;
+       while not eof do
+         begin
+           templistacliente.FListaClientes.Add(Tclientes.Create);
+           i := templistacliente.FListaClientes.Count -1;
+           templistacliente.FListaClientes[i].id := fieldbyname('cod_cliente').value;
+           templistacliente.FListaClientes[i].nome:= fieldbyname('nome').value;
+           templistacliente.FListaClientes[i].cidade := fieldbyname('cidade').value;
+           templistacliente.FListaClientes[i].uf := fieldbyname('uf').value;
+           next;
+       end;
+       Except
+       on E: Exception do
+          begin
+            ShowMessage('Erro ao Buscar Clientes : ' + E.Message );
+          end;
+     end;
+
+     Result := templistacliente.FListaClientes;
+     Free;
+  end;
+end;
+
+
+constructor Tclientes.Create;
+begin
+   Fid:=0;
+   Fnome:='';
+   Fcidade='';
+   Fuf='';
+end;
+
+
+
+
+procedure Tclientes.Setcidade(const Value: String);
+begin
+  Fcidade := Value;
+end;
+
+
+procedure Tclientes.Setid(const Value: Integer);
+begin
+  Fid := Value;
+end;
+
+
+procedure Tclientes.Setnome(const Value: String);
+begin
+  Fnome := Value;
+end;
+
+procedure Tclientes.Setuf(const Value: String);
+begin
+  Fuf := Value;
+end;
+
+
+
+
+{ TListaCliente }
+
+procedure TListaCliente.Adicionar(pCliente: Tclientes);
+begin
+   FListaClientes.Add(pCliente);
+end;
+
+
+constructor TListaCliente.Create;
+begin
+  FListaClientes := TObjectList<Tclientes>.Create;
+end;
+
+
+end.
