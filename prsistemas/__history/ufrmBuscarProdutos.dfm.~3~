@@ -1,0 +1,9 @@
+inherited frmBuscarProdutos: TfrmBuscarProdutos
+  Caption = 'Buscar Produtos'
+  TextHeight = 15
+  inherited grpPrincipal: TGroupBox
+    inherited btnBuscar: TBitBtn
+      OnClick = btnBuscarClick
+    end
+  end
+end

@@ -1,0 +1,16 @@
+object dmModule: TdmModule
+  Height = 480
+  Width = 640
+  object conexaoBanco: TADOConnection
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Persist Security Info=False;User ID=sa;Initi' +
+      'al Catalog=prsistemas;Data Source=FERNANDO-SILVA;Use Procedure f' +
+      'or Prepare=1;Auto Translate=True;Packet Size=4096;Workstation ID' +
+      '=FERNANDO-SILVA;Use Encryption for Data=False;Tag with column co' +
+      'llation when possible=False'
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Left = 408
+    Top = 272
+  end
+end

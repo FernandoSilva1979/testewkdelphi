@@ -1,0 +1,4 @@
+inherited frmBuscarPedidos: TfrmBuscarPedidos
+  Caption = 'Pedidos'
+  TextHeight = 15
+end

@@ -1,0 +1,78 @@
+unit ufrmBuscarProdutos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ufrmTemplateBuscar, Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.Buttons, Data.Bind.Controls,
+  Vcl.ExtCtrls, Vcl.Bind.Navigator,System.Generics.Collections, System.Classes;
+
+type
+  TfrmBuscarProdutos = class(TfrmTemplateBuscar)
+    tableTemp: TFDMemTable;
+    tableTempid: TIntegerField;
+    tableTempdescricao: TStringField;
+    tableTemppreco: TStringField;
+    tableTempcod_produto: TStringField;
+    procedure btnBuscarClick(Sender: TObject);
+    procedure gridBuscaDblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmBuscarProdutos: TfrmBuscarProdutos;
+
+implementation
+    uses uclasseProdutos, ufrmProdutos;
+{$R *.dfm}
+
+procedure TfrmBuscarProdutos.btnBuscarClick(Sender: TObject);
+ var produtoatual : Tprodutos;
+     templistaproduto: TObjectList<Tprodutos>;
+     contador : integer;
+  begin
+   produtoatual:=Tprodutos.Create;
+   templistaproduto := produtoatual.buscarProduto(edtBuscar.text,'lista');
+   tableTemp.EmptyDataSet;
+    for contador := 0 to (templistaproduto.Count-1) do
+     begin
+        tableTemp.Insert;
+        tableTempid.asstring := inttostr(templistaproduto[contador].id);
+        tableTempcod_produto.asstring := inttostr(templistaproduto[contador].cod_produto);
+        tableTempdescricao.AsString := templistaproduto[contador].descricao;
+        tableTemppreco.AsString := floattostr(templistaproduto[contador].preco_venda);
+        tableTemp.Post;
+       end;
+    labEncontrados.Caption:='Encontrados : '+inttostr(templistaproduto.Count);
+  end;
+
+
+procedure TfrmBuscarProdutos.gridBuscaDblClick(Sender: TObject);
+ var produtoatual : Tprodutos;
+     tempproduto: TObjectList<Tprodutos>;
+     contador : integer;
+  begin
+     If  MessageDlg('Você tem certeza que deseja excluir o registro?',mtConfirmation,[mbyes,mbno],0)=mrno    then
+       exit;
+       produtoatual:=Tprodutos.Create;
+       tempproduto := produtoatual.buscarProduto(tableTempid.asstring,'individual');
+       with frmProdutos do
+         begin
+            labIdAtual.caption:= inttostr(tempproduto.Items[0].id);
+            edtDescricao.Text:= tempproduto[0].descricao;
+            EdtCodProduto.Text := inttostr(tempproduto[0].cod_produto);
+            edtPreco.Text:= floattostr(tempproduto[0].preco_venda);
+            grpPrincipal.Enabled:=true;
+            AtivarBotoes(1);
+         end;
+         ModalResult:=mrok;
+      end;
+
+end.

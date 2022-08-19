@@ -1,0 +1,27 @@
+program ProjAgrotis;
+
+uses
+  Vcl.Forms,
+  ufrmPrincipal in 'ufrmPrincipal.pas' {frmPrincipal},
+  ufrmTemplateCadastro in 'ufrmTemplateCadastro.pas' {frmTemplateCadastro},
+  ufrmTemplateBuscar in 'ufrmTemplateBuscar.pas' {frmTemplateBuscar},
+  udmModule in 'udmModule.pas' {dmModule: TDataModule},
+  ufrmClientes in 'ufrmClientes.pas' {frmClientes},
+  ufrmBuscarClientes in 'ufrmBuscarClientes.pas' {frmBuscarClientes},
+  uclasseClientes in 'uclasseClientes.pas',
+  ufrmListagem in 'ufrmListagem.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TfrmTemplateCadastro, frmTemplateCadastro);
+  Application.CreateForm(TfrmTemplateBuscar, frmTemplateBuscar);
+  Application.CreateForm(TdmModule, dmModule);
+  Application.CreateForm(TfrmClientes, frmClientes);
+  Application.CreateForm(TfrmBuscarClientes, frmBuscarClientes);
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

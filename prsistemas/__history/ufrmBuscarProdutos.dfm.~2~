@@ -1,0 +1,4 @@
+inherited frmBuscarProdutos: TfrmBuscarProdutos
+  Caption = 'Buscar Produtos'
+  TextHeight = 15
+end

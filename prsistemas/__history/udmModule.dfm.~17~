@@ -1,0 +1,13 @@
+object dmModule: TdmModule
+  Height = 480
+  Width = 640
+  object conexaoBanco: TADOConnection
+    Connected = True
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Persist Security Info=False;User ID=sa;Initi' +
+      'al Catalog=prsistemas;Data Source=FERNANDO-SILVA'
+    Provider = 'SQLOLEDB.1'
+    Left = 408
+    Top = 272
+  end
+end

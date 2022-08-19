@@ -1,0 +1,22 @@
+program PrSistemas;
+
+uses
+  Vcl.Forms,
+  ufrmPrincipal in 'ufrmPrincipal.pas' {frmPrincipal},
+  ufrmTemplateCadastro in 'ufrmTemplateCadastro.pas' {frmTemplateCadastro},
+  ufrmTemplateBuscar in 'ufrmTemplateBuscar.pas' {frmTemplateBuscar},
+  udmModule in 'udmModule.pas' {dmModule: TDataModule},
+  ufrmClientes in 'ufrmClientes.pas' {frmClientes},
+  ufrmBuscarClientes in 'ufrmBuscarClientes.pas' {frmBuscarClientes},
+  uclasseClientes in 'uclasseClientes.pas',
+  ufrmListagem in 'ufrmListagem.pas' {frmListagem};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TdmModule, dmModule);
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.Run;
+end.

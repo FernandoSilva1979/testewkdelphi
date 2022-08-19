@@ -1,0 +1,47 @@
+unit ufrmPrincipal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ToolWin,
+  System.ImageList, Vcl.ImgList, Vcl.Menus;
+
+type
+  TfrmPrincipal = class(TForm)
+    ImageMenu: TImageList;
+    ImageNavigator: TImageList;
+    ToolBar1: TToolBar;
+    ToolButton13: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton11: TToolButton;
+    ToolButton2: TToolButton;
+    procedure ToolButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPrincipal: TfrmPrincipal;
+implementation
+uses ufrmClientes, ufrmProdutos;
+{$R *.dfm}
+
+
+
+
+procedure TfrmPrincipal.ToolButton4Click(Sender: TObject);
+begin
+    try
+       frmClientes := TfrmClientes.Create(Self);    //  formes criados e destruidos em tempo de execaucao
+       frmClientes.ShowModal;
+    finally
+      freeandnil(frmClientes)
+    end;
+end;
+
+end.

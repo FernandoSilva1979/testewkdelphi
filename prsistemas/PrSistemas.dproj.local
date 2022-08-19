@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2022/08/09 14:39:03.000.723,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 14:51:54.000.881,D:\Agrotis\ufrmPrincipal.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 14:51:54.000.882,D:\Agrotis\ufrmPrincipal.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 15:01:34.000.985,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:05:18.000.345,D:\Agrotis\ufrmTemplateCadastro.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:05:18.000.346,D:\Agrotis\ufrmTemplateCadastro.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 15:31:38.000.962,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:35:23.000.032,D:\Agrotis\ufrmTemplateBuscar.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 15:35:23.000.032,D:\Agrotis\ufrmTemplateBuscar.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:44:31.000.601,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:44:51.000.271,D:\Agrotis\udmModule.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:44:51.000.271,D:\Agrotis\udmModule.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 15:56:34.000.356,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:56:56.000.800,D:\Agrotis\ufrmClientes.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:56:56.000.800,D:\Agrotis\ufrmClientes.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 15:58:29.000.245,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 15:59:14.000.141,D:\Agrotis\ufrmBuscarClientes.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 15:59:14.000.141,D:\Agrotis\ufrmBuscarClientes.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 17:25:14.000.754,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 17:25:37.000.398,D:\Agrotis\uclasseClientes.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 18:19:24.000.033,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 18:19:47.000.412,D:\Agrotis\uclasseProdutos.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 18:24:58.000.654,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 18:25:23.000.521,D:\Agrotis\ufrmProdutos.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 18:25:23.000.521,D:\Agrotis\ufrmProdutos.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 18:31:10.000.532,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 18:31:47.000.346,D:\Agrotis\ufrmBuscarProdutos.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 18:31:47.000.346,D:\Agrotis\ufrmBuscarProdutos.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 19:04:05.000.967,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 19:04:29.000.730,D:\Agrotis\uclassePedidos.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 19:32:12.000.209,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 19:32:27.000.072,D:\Agrotis\ufrmPedidos.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 19:32:27.000.072,D:\Agrotis\ufrmPedidos.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 19:36:48.000.110,=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/09 19:37:11.000.813,D:\Agrotis\ufrmBuscarPedidos.dfm=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2022/08/09 19:37:11.000.813,D:\Agrotis\ufrmBuscarPedidos.pas=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/08/10 11:53:30.000.748,D:\Agrotis\ProjAgrotis.dproj=C:\Users\ferna\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2022/08/18 18:48:54.000.831,D:\testewkdelphi\prsistemas\ufrmBuscarPedidos.pas=</Transaction>
+    <Transaction>2022/08/18 18:48:54.000.823,D:\testewkdelphi\prsistemas\ufrmPedidos.pas=</Transaction>
+    <Transaction>2022/08/18 18:48:54.000.837,D:\testewkdelphi\prsistemas\uclasseProdutos.pas=</Transaction>
+    <Transaction>2022/08/18 18:48:54.000.827,D:\testewkdelphi\prsistemas\ufrmBuscarProdutos.pas=</Transaction>
+    <Transaction>2022/08/18 18:48:54.000.790,D:\testewkdelphi\prsistemas\ufrmProdutos.pas=</Transaction>
+    <Transaction>2022/08/18 18:48:54.000.843,D:\testewkdelphi\prsistemas\uclassePedidos.pas=</Transaction>
+    <Transaction>2022/08/19 00:43:48.000.073,=D:\testewkdelphi\prsistemas\Unit1.pas</Transaction>
+    <Transaction>2022/08/19 00:44:07.000.062,D:\testewkdelphi\prsistemas\Unit1.dfm=D:\testewkdelphi\prsistemas\ufrmListagem.dfm</Transaction>
+    <Transaction>2022/08/19 00:44:07.000.062,D:\testewkdelphi\prsistemas\Unit1.pas=D:\testewkdelphi\prsistemas\ufrmListagem.pas</Transaction>
+    <Transaction>2022/08/19 01:59:16.000.006,D:\testewkdelphi\prsistemas\ProjAgrotis.dproj=D:\testewkdelphi\prsistemas\PrSistemas.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

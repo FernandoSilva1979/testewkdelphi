@@ -1,0 +1,163 @@
+inherited frmBuscarClientes: TfrmBuscarClientes
+  Caption = 'Buscar Clientes'
+  TextHeight = 15
+  inherited grpPrincipal: TGroupBox
+    ExplicitWidth = 673
+    inherited btnBuscar: TBitBtn
+      Width = 81
+      OnClick = btnBuscarClick
+      ExplicitWidth = 81
+    end
+    object btnRelatorio: TBitBtn
+      Left = 432
+      Top = 28
+      Width = 97
+      Height = 25
+      Caption = 'F5- Relat'#243'rio'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+    end
+  end
+  inherited grpFuncoes: TGroupBox
+    ExplicitWidth = 673
+    inherited grpEncontrados: TGroupBox
+      ExplicitWidth = 669
+    end
+    inherited gridBusca: TDBGrid
+      OnDblClick = gridBuscaDblClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'id'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'nome'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'cep'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'endereco'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'nro'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'bairro'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'cidade'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'uf'
+          Visible = True
+        end>
+    end
+  end
+  inherited dsTemp: TDataSource
+    DataSet = tableTemp
+    Left = 168
+    Top = 257
+  end
+  object tableTemp: TFDMemTable
+    Active = True
+    FieldDefs = <
+      item
+        Name = 'id'
+        DataType = ftInteger
+      end
+      item
+        Name = 'nome'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'cep'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'endereco'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'nro'
+        DataType = ftInteger
+      end
+      item
+        Name = 'bairro'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'cidade'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'uf'
+        DataType = ftString
+        Size = 20
+      end>
+    IndexDefs = <>
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    StoreDefs = True
+    Left = 152
+    Top = 185
+    object tableTempid: TIntegerField
+      FieldName = 'id'
+    end
+    object tableTempnome: TStringField
+      FieldName = 'nome'
+    end
+    object tableTempcep: TStringField
+      FieldName = 'cep'
+    end
+    object tableTempendereco: TStringField
+      FieldName = 'endereco'
+    end
+    object tableTempnro: TIntegerField
+      FieldName = 'nro'
+    end
+    object tableTempbairro: TStringField
+      FieldName = 'bairro'
+    end
+    object tableTempcidade: TStringField
+      FieldName = 'cidade'
+    end
+    object tableTempuf: TStringField
+      FieldName = 'uf'
+    end
+  end
+  object ADOQuery1: TADOQuery
+    Parameters = <>
+    Left = 456
+    Top = 40
+  end
+end
